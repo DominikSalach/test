@@ -1,0 +1,16 @@
+{
+  "Rates": {
+    "PLN": 1,
+    "EUR": 4.30,
+    "USD": 4.00
+  },
+  "Rules": {
+    "biedronka": "Jedzenie",
+    "lidl": "Jedzenie",
+    "orlen": "Transport"
+  },
+  "Budgets": {
+    "Jedzenie": 1000,
+    "Transport": 500
+  }
+}
