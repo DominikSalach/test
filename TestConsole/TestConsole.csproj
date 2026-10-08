@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>GP.Tests</AssemblyName>
+    <RootNamespace>GP.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Update="appsettings.json"
