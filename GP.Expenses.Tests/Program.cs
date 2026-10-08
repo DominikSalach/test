@@ -69,6 +69,41 @@ var restored = JsonSerializer.Deserialize<List<Expense>>(
 Check(restored is not null && restored.SequenceEqual(expenses),
     "Zapis i odczyt JSON");
 
+foreach (var separator in new[] { ';', ',' })
+{
+    foreach (var quotedHeader in new[] { false, true })
+    {
+        var columns = new[] { "data", "kwota", "waluta", "opis" };
+        var header = string.Join(
+            separator.ToString(),
+            columns.Select(column => quotedHeader ? $"\"{column}\"" : column));
+
+        using var reader = new StringReader(
+            header + "\n" +
+            $"2026-01-02{separator}\"12,50\"{separator}PLN{separator}Biedronka\n");
+
+        var imported = new List<Expense>();
+        var importErrors = new List<string>();
+        var name = $"Separator '{separator}', cytowany nagłówek: {quotedHeader}";
+
+        var result = ExpenseService.Import(
+            reader, imported, settings,
+            (line, error) => importErrors.Add($"{line}: {error}"));
+
+        Check(result == new ImportResult(1, 0, 0), $"{name}: wynik importu");
+        Check(importErrors.Count == 0, $"{name}: brak błędów");
+        Check(imported.SequenceEqual(new[]
+        {
+            new Expense(
+                new DateOnly(2026, 1, 2),
+                12.50m,
+                "PLN",
+                "Biedronka",
+                "Jedzenie")
+        }), $"{name}: zawartość wydatku");
+    }
+}
+
 Console.WriteLine("Wszystkie testy przeszły.");
 
 static void Check(bool condition, string name)
